@@ -2,7 +2,7 @@ name: Node.js Demo
 run-name: ${{ github.actor }} is testing out Node.js 🚀
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  Nodejs-Demo_Actions:
     runs-on: [self-hosted, Windows, X64]
     steps:
       - uses: actions/checkout@v3
