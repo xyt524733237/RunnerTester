@@ -1,0 +1,15 @@
+name: Node.js Demo Ubuntu
+run-name: ${{ github.actor }} is testing out Node.js 🚀
+on: [push]
+jobs:
+  Nodejs-Demo-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: set http_proxy=http://proxyhk.huawei.com:8080
+      - run: set https_proxy=http://proxyhk.huawei.com:8080
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: npm test
