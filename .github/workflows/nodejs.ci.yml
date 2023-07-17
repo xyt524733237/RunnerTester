@@ -1,10 +1,6 @@
 name: Node.js CI
 run-name: ${{ github.actor }} is testing out Node.js 🚀
-on:
-  push:
-    branches: [ $default-branch ]
-  pull_request:
-    branches: [ $default-branch ]
+on: [push]
 jobs:
   build:
     runs-on: self-hosted, Windows, X64
