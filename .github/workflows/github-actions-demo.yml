@@ -20,5 +20,5 @@ jobs:
       - name: Check out Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16
       - run: git config --global http.sslVerify true
