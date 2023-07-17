@@ -1,15 +1,26 @@
-name: Node.js Demo
+name: Node.js CI
 run-name: ${{ github.actor }} is testing out Node.js 🚀
-on: [push]
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+
 jobs:
-  Nodejs-Demo_Actions:
-    runs-on: [self-hosted, Windows, X64]
+  build:
+    runs-on: self-hosted, Windows, X64
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
     steps:
-      - run: set http_proxy=http://proxyhk.huawei.com:8080
-      - run: set https_proxy=http://proxyhk.huawei.com:8080
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - run: npm ci
-      - run: npm test
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
