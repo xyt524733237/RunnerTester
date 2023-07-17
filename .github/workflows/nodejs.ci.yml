@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is testing out Node.js 🚀
 on: [push]
 jobs:
   build:
-    runs-on: self-hosted, Windows, X64
+    runs-on: [self-hosted, Windows, X64]
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x]
