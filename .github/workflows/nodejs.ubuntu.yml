@@ -6,10 +6,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: ls /opt/hostedtoolcache/node/16.20.1/x64
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: 'npm'
-      - run: npm ci
-      - run: npm test
+      - run: ls /opt/hostedtoolcache/node/16.20.1/x64/bin
+      - run: ls /opt/hostedtoolcache/node/16.20.1/x64/lib
+      - run: ls /opt/hostedtoolcache/node/16.20.1/x64/share
+      #- uses: actions/checkout@v3
+      #- uses: actions/setup-node@v3
+      #  with:
+      #    node-version: 16
+      #    cache: 'npm'
+      #- run: npm ci
+      #- run: npm test
