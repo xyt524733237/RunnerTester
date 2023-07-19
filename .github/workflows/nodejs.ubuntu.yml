@@ -5,6 +5,7 @@ jobs:
   Nodejs-Demo-Actions:
     runs-on: ubuntu-latest
     steps:
+      - run: ls /opt/hostedtoolcache/node/16.20.1/x64
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
