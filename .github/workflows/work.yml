@@ -6,4 +6,4 @@ jobs:
     runs-on: [self-hosted, Windows, X64]
     steps:
       - name: docker-action-demo3
-        uses: devops-actions/docker-action-demo3
+        uses: devops-actions/docker-action-demo3@master
