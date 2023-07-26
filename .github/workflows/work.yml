@@ -3,7 +3,8 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 馃殌
 on: [push]
 jobs:
   Explore-GitHub-Actions:
-    runs-on: [self-hosted, Windows, X64]
+    # runs-on: [self-hosted, Windows, X64]
+    runs-on: ubuntu-latest
     steps:
       - name: docker-action-demo3
         uses: devops-actions/docker-action-demo3@main
