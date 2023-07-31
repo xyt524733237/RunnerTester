@@ -1,10 +1,19 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 馃殌
-on: [push]
+name: CI
+on:
+  push:
+    branches: [ main ]
 jobs:
-  Explore-GitHub-Actions:
-    # runs-on: [self-hosted, Windows, X64]
+  container-test-job:
     runs-on: ubuntu-latest
+    container:
+      image: node:14.16
+      env:
+        NODE_ENV: development
+      ports:
+        - 80
+      volumes:
+        - my_docker_volume:/volume_mount
+      options: --cpus 1
     steps:
-      - name: docker-action-demo3
-        uses: devops-actions/docker-action-demo3@main
+      - name: Check for dockerenv file
+        run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
