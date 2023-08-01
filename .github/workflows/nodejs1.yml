@@ -16,7 +16,7 @@ jobs:
         run: echo "test=world" >> "$GITHUB_OUTPUT"
         shell: bash
   job2:
-    runs-on: [self-hosted, Windows, X64]
+    runs-on: ubuntu-latest
     needs: job1
     steps:
       - env:
