@@ -1,0 +1,32 @@
+name: docker_test
+
+on: [push]
+
+jobs:
+  # Label of the container job
+  redis-integration-test:
+    # Containers must run in Linux based operating systems
+    runs-on: ubuntu-latest
+    # # Docker image that `job` executes in
+    # container: mcr.microsoft.com/dotnet/sdk:5.0
+
+    # Service containers to run with `container-job`
+    # https://docs.github.com/en/free-pro-team@latest/actions/guides/creating-redis-service-containers
+    services:
+      # Label used to access the service container
+      redis:
+        # Docker Hub image
+        image: ubuntu
+        # Set health checks to wait until redis has started
+        #options: >-
+        #  --health-cmd "redis-cli ping"
+        #  --health-interval 10s
+        #  --health-timeout 5s
+        #  --health-retries 5
+        ports:
+          # Maps port 6379 on service container to the host
+          - 6379:6379
+
+    steps:
+      - name: Check for dockerenv file
+        run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
