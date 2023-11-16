@@ -19,15 +19,17 @@ jobs:
     - name: Download and extract glibc source
       run: wget https://ftp.gnu.org/gnu/glibc/glibc-2.33.tar.gz && tar -xzf glibc-2.33.tar.gz && cd glibc-2.33
 
-    - name: Build and install glibc
+    - name: Build glibc
       run: |
-        ls
         cd glibc-2.33
-        ./configure --prefix=/usr/local/glibc
-        make && sudo make install
+        mkdir build
+        cd build
+        mkdir -p /usr/local/glibc-2.3.3
+        ../configure --prefix=/usr/local/glibc-2.3.3
+        make
 
     - name: Create archive of glibc files
-      run: tar -czvf glibc.tar.gz /usr/local/glibc
+      run: tar -czvf glibc.tar.gz /usr/local/glibc-2.3.3
 
     - name: Push archive to repository
       uses: actions/upload-artifact@v2
