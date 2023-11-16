@@ -1,19 +1,32 @@
-name: CI
-on:
-  push:
-    branches: [ main ]
+name: Build glibc
+
+on: [push]
+
 jobs:
-  container-test-job:
-    runs-on: [self-hosted, Windows, X64]
-    container:
-      image: node:14.16
-      env:
-        NODE_ENV: development
-      ports:
-        - 80
-      volumes:
-        - my_docker_volume:/volume_mount
-      options: --cpus 1
+  build:
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Check for dockerenv file
-        run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y build-essential texinfo
+
+    - name: Download and extract glibc
+      run: |
+        wget https://ftp.gnu.org/gnu/glibc/glibc-2.33.tar.gz
+        tar -xzvf glibc-2.33.tar.gz
+
+    - name: Configure and build glibc
+      run: |
+        cd glibc-2.33
+        mkdir build && cd build
+        ../configure --prefix=/usr
+        make -j$(nproc)
+
+    - name: Push compiled files to repo
+      uses: actions/upload-artifact@v2
+      with:
+        name: glibc
+        path: glibc-2.33/build
