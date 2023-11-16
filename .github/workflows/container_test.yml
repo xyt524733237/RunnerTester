@@ -24,9 +24,9 @@ jobs:
         cd glibc-2.33
         mkdir build
         cd build
-        mkdir -p /usr/local/glibc-2.3.3
+        sudo mkdir -p /usr/local/glibc-2.3.3
         ../configure --prefix=/usr/local/glibc-2.3.3
-        make
+        sudo make
 
     - name: Create archive of glibc files
       run: tar -czvf glibc.tar.gz /usr/local/glibc-2.3.3
