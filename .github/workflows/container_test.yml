@@ -1,9 +1,8 @@
-name: Build and Push aarch64-linux-musl-gcc
+name: Build aarch64-linux-musl-gcc
 
 on:
   push:
-    branches:
-      - main
+    branches: [ master ]
 
 jobs:
   build:
@@ -12,24 +11,24 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-      
+
     - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y curl git make musl-dev gcc
+      run: sudo apt-get update && sudo apt-get install -y build-essential wget
 
     - name: Download and extract aarch64-linux-musl-gcc
       run: |
-        mkdir -p $HOME/gcc
-        cd $HOME/gcc
-        curl -L https://musl.cc/aarch64-linux-musl-cross.tgz | tar xzvf -
-        
+        wget https://musl.cc/aarch64-linux-musl-cross.tgz
+        tar -xvf aarch64-linux-musl-cross.tgz
+
     - name: Build aarch64-linux-musl-gcc
       run: |
-        cd $HOME/gcc
-        export PATH=$HOME/gcc/bin:$PATH
-        make -j$(nproc) all-target-libgcc
-        
-    - name: Push aarch64-linux-musl-gcc to repository
+        cd aarch64-linux-musl-cross
+        ./configure --prefix=/usr/local/aarch64-linux-musl
+        make -j$(nproc)
+        sudo make install
+
+    - name: Push compiled files to repository
       uses: actions/upload-artifact@v2
       with:
         name: aarch64-linux-musl-gcc
-        path: $HOME/gcc/bin/aarch64-linux-musl-gcc
+        path: /usr/local/aarch64-linux-musl
