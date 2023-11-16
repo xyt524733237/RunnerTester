@@ -1,8 +1,9 @@
-name: Build and Push
+name: Build and Push aarch64-linux-musl-gcc
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
@@ -11,20 +12,24 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+      
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y curl git make musl-dev gcc
 
-    - name: Setup toolchain
+    - name: Download and extract aarch64-linux-musl-gcc
       run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential curl
-        curl -L https://musl.cc/aarch64-linux-musl-cross.tgz | sudo tar xz -C /usr/local
-
-    - name: Build
+        mkdir -p $HOME/gcc
+        cd $HOME/gcc
+        curl -L https://musl.cc/aarch64-linux-musl-cross.tgz | tar xzvf -
+        
+    - name: Build aarch64-linux-musl-gcc
       run: |
-        export CC=/usr/local/aarch64-linux-musl/bin/aarch64-linux-musl-gcc
-        make
-
-    - name: Push
-      uses: ad-m/github-push-action@master
+        cd $HOME/gcc
+        export PATH=$HOME/gcc/bin:$PATH
+        make -j$(nproc) all-target-libgcc
+        
+    - name: Push aarch64-linux-musl-gcc to repository
+      uses: actions/upload-artifact@v2
       with:
-        github_token: ${{ secrets.CODEHUB_TOKEN }}
-        branch: main
+        name: aarch64-linux-musl-gcc
+        path: $HOME/gcc/bin/aarch64-linux-musl-gcc
