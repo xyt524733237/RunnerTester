@@ -1,32 +1,30 @@
-name: Build glibc
+name: Build and Push
 
-on: [push]
+on:
+  push:
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y build-essential texinfo
-
-    - name: Download and extract glibc
+    - name: Setup toolchain
       run: |
-        wget https://ftp.gnu.org/gnu/glibc/glibc-2.33.tar.gz
-        tar -xzvf glibc-2.33.tar.gz
+        sudo apt-get update
+        sudo apt-get install -y build-essential curl
+        curl -L https://musl.cc/aarch64-linux-musl-cross.tgz | sudo tar xz -C /usr/local
 
-    - name: Configure and build glibc
+    - name: Build
       run: |
-        cd glibc-2.33
-        mkdir build && cd build
-        ../configure --prefix=/usr
-        make -j$(nproc)
+        export CC=/usr/local/aarch64-linux-musl/bin/aarch64-linux-musl-gcc
+        make
 
-    - name: Push compiled files to repo
-      uses: actions/upload-artifact@v2
+    - name: Push
+      uses: ad-m/github-push-action@master
       with:
-        name: glibc
-        path: glibc-2.33/build
+        github_token: ${{ secrets.CODEHUB_TOKEN }}
+        branch: main
